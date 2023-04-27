@@ -1,0 +1,15 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: "Create group consul"
+      ansible.builtin.group:
+        name: "consul"
+        state: present
+
+    - name: "Create user consul"
+      ansible.builtin.user:
+        name: "consul"
+        group: "consul"
+        shell: /bin/false
+        state: present
