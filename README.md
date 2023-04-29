@@ -1,37 +1,37 @@
-Renew vault certificates
+Renew consul certificates
 =========
 > This repository is only a mirror. Development and testing is done on a private gitlab server.
 
-This role install consul-template and configure a service to automate renewal of TLS certificates for Hashicorp Vault on **debian-based** distributions.
+This role install consul-template and configure a service to automate renewal of TLS certificates for Hashicorp Consul on **debian-based** distributions.
 
 Requirements
 ------------
 
-This role assume that you already have installed a vault server on the host, and is only here to assist in automating the certificate renewal process.
+This role assume that you already have installed a consul server on the host, and is only here to assist in automating the certificate renewal process.
 
 Role Variables
 --------------
-Available variables are listed below, along with default values. A sample file for the default values is available in `default/renew_vault_certificates.yml.sample` in case you need it for any `group_vars` or `host_vars` configuration.
+Available variables are listed below, along with default values. A sample file for the default values is available in `default/renew_consul_certificates.yml.sample` in case you need it for any `group_vars` or `host_vars` configuration.
 
 ```yaml
-renew_vault_certificates_config_dir: /etc/consul-template.d/vault # by default, set to /etc/consul-template.d/vault
+renew_consul_certificates_config_dir: /etc/consul-template.d/consul # by default, set to /etc/consul-template.d/consul
 ```
 This variable defines where the files for the role are stored (consul-template configuration + templates).
 
 ```yaml
-renew_vault_certificates_vault_user: vault # by default, set to vault
+renew_vault_certificates_consul_user: consul # by default, set to consul
 ```
-This variable defines the user that'll be running the certificate renewal service. Defaults to `vault`, and should be present on the host prior to playing this role (ideally when installing vault).
+This variable defines the user that'll be running the certificate renewal service. Defaults to `consul`, and should be present on the host prior to playing this role (ideally when installing consul).
 
 ```yaml
-renew_vault_certificates_vault_group: vault # by default, set to vault
+renew_vault_certificates_consul_group: consul # by default, set to consul
 ```
-This variable defines the group that'll be running the certificate renewal service. Defaults to `vault`, and should be present on the host prior to playing this role (ideally when installing vault).
+This variable defines the group that'll be running the certificate renewal service. Defaults to `consul`, and should be present on the host prior to playing this role (ideally when installing consul).
 
 ```yaml
 renew_vault_certificates_vault_addr: https://127.0.0.1:8200 # by default, set to https://127.0.0.1:8200
 ```
-This variable defines the address the consul-template service will query to get the new certificates. Defaults to localhost, but can be changed if vault isnt reachable on localhost (because of missing certificates SANs for example).
+This variable defines the address the consul-template service will query to get the new certificates. Defaults to localhost, but can be changed if vault isnt reachable on localhost.
 
 ```yaml
 renew_vault_certificates_vault_token: mysupersecretvaulttokenthatyoushouldchange # by default, set to a dummy string
@@ -49,31 +49,42 @@ renew_vault_certificates_vault_token_renew: true # by default, set to true
 This variable defines whether or not to renew the vault token. It should probably be `true`, and you should have a periodic token to handle this.
 
 ```yaml
-renew_vault_certificates_cert_dest: /opt/vault/tls/cert.pem # by default, set to /opt/vault/tls/cert.pem
+renew_consul_certificates_ca_dest: /opt/consul/tls/ca.pem # by default, set to /opt/consul/tls/ca.pem
 ```
-This variable defines where to copy the certificates upon renewal. Default to `/opt/vault/tls/cert.pem` but should be changed depending on where you store the certificates.
+This variable defines where to copy the certificate authority upon renewal. Default to `/opt/consul/tls/ca.pem` but should be changed depending on where you store the certificate authority.
 
 ```yaml
-renew_vault_certificates_key_dest: /opt/vault/tls/key.pem # by default, set to /opt/vault/tls/cert.pem
+renew_vault_certificates_cert_dest: /opt/consul/tls/cert.pem # by default, set to /opt/consul/tls/cert.pem
 ```
-This variable defines where to copy the private keys upon renewal. Default to `/opt/vault/tls/key.pem` but should be changed depending on where you store the keys.
+This variable defines where to copy the certificates upon renewal. Default to `/opt/consul/tls/cert.pem` but should be changed depending on where you store the certificates.
 
 ```yaml
-renew_vault_certificates_info: # by default, set to:
+renew_consul_certificates_key_dest: /opt/consul/tls/key.pem # by default, set to /opt/consul/tls/cert.pem
+```
+This variable defines where to copy the private keys upon renewal. Default to `/opt/consul/tls/key.pem` but should be changed depending on where you store the keys.
+
+```yaml
+renew_consul_certificates_info: # by default, set to:
   issuer_path: pki/issue/your-issuer
-  common_name: vault01.example.com
+  common_name: consul01.example.com
   ttl: 90d
+  is_server: false
   include_consul_service: false
 ```
-This variable defines the path on vault to retrieve the certificates, as well as the common name and TTL to use for it. It can also include vault aliases in case you have registered vault services in a consul cluster (`active.vault.service.consul,` `standby.vault.service.consul`, `vault.service.consul`).
+This variable defines the path on vault to retrieve the certificates, as well as the common name and TTL to use for it. It can also include consul aliases in case you have registered consul services in itself (`consul.service.consul`). It also handles whether or not to append the server.yourdc.consul SAN, in case you're enforcing hostname checking.
 
 ```yaml
-renew_vault_certificates_consul_service_name: vault.service.consul # by default, set to vault.service.consul
+renew_consul_certificates_consul_dc_name: dc1.consul # by default, set to dc1.consul
 ```
-This variable defines the vault service name in consul. Default is `vault.service.consul`
+In case you enforce hostname checking, set this variable to your desired dc and consul domain. This is used to forge the SAN that will be checked by consul to only allow specific nodes to be managers.
 
 ```yaml
-renew_vault_certificates_start_service: false
+renew_consul_certificates_consul_service_name: consul.service.consul # by default, set to consul.service.consul
+```
+This variable defines the consul service name in consul. Default is `consul.service.consul`
+
+```yaml
+renew_consul_certificates_start_service: false
 ```
 This variable defines whether or not to start the service after creating it. By default, it is only enabled, but not started, in case you're building golden images (in which case you probably don't want a certificate generated during the build process).
 
@@ -90,7 +101,7 @@ Including an example of how to use your role (for instance, with variables passe
 # calling the role inside a playbook with either the default or group_vars/host_vars
 - hosts: servers
   roles:
-    - ednxzu.renew_vault_certificates
+    - ednxzu.renew_consul_certificates
 ```
 
 License

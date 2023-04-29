@@ -18,6 +18,7 @@ def test_consul_template_config(host):
 
 def test_template_files(host):
     """Validate /etc/consul-template.d/consul/templates/ files."""
+    consul_ca_pem_tpl = host.file("/etc/consul-template.d/consul/templates/consul_ca.pem.tpl")
     consul_cert_pem_tpl = host.file("/etc/consul-template.d/consul/templates/consul_cert.pem.tpl")
     consul_key_pem_tpl = host.file("/etc/consul-template.d/consul/templates/consul_key.pem.tpl")
     for file in consul_cert_pem_tpl, consul_key_pem_tpl:
@@ -25,8 +26,9 @@ def test_template_files(host):
         assert file.user == "consul"
         assert file.group == "consul"
         assert file.mode == 0o600
-    assert consul_cert_pem_tpl.content_string == '{{ with secret "pki/issue/consul-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,consul.service.consul,active.consul.service.consul,standby.consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.certificate }}\n{{ .Data.issuing_ca }}\n{{ end }}\n'
-    assert consul_key_pem_tpl.content_string == '{{ with secret "pki/issue/consul-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,consul.service.consul,active.consul.service.consul,standby.consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.private_key }}\n{{ end }}\n'
+    assert consul_ca_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.issuing_ca }}\n{{ end }}\n'
+    assert consul_cert_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.certificate }}\n{{ end }}\n'
+    assert consul_key_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.private_key }}\n{{ end }}\n'
 
 def test_consul_certs_service_file(host):
     """Validate consul-certs service file."""

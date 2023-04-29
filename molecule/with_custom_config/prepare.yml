@@ -2,14 +2,14 @@
 - name: Prepare
   hosts: all
   tasks:
-    - name: "Create group vault"
+    - name: "Create group consul"
       ansible.builtin.group:
-        name: "vault"
+        name: "consul"
         state: present
 
-    - name: "Create user vault"
+    - name: "Create user consul"
       ansible.builtin.user:
-        name: "vault"
-        group: "vault"
+        name: "consul"
+        group: "consul"
         shell: /bin/false
         state: present
