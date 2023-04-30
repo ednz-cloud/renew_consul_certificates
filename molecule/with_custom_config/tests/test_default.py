@@ -27,7 +27,7 @@ def test_template_files(host):
         assert file.group == "consul"
         assert file.mode == 0o600
     assert consul_ca_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.issuing_ca }}\n{{ end }}\n'
-    assert consul_cert_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.certificate }}\n{{ end }}\n'
+    assert consul_cert_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.certificate }}\n{{ .Data.issuing_ca }}\n{{ end }}\n'
     assert consul_key_pem_tpl.content_string == '{{ with secret "pki/issue/your-issuer" "common_name=consul01.example.com" "ttl=90d" "alt_names=localhost,server.dc1.consul,consul.service.consul" "ip_sans=127.0.0.1" }}\n{{ .Data.private_key }}\n{{ end }}\n'
 
 def test_consul_certs_service_file(host):
