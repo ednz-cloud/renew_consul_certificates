@@ -3,7 +3,7 @@
 renew_consul_certificates_config_dir: /etc/consul-template.d/consul
 renew_consul_certificates_consul_user: consul
 renew_consul_certificates_consul_group: consul
-renew_consul_certificates_vault_addr: "https://consul.example.com"
+renew_consul_certificates_vault_addr: "https://vault.example.com"
 renew_consul_certificates_vault_token: mysupersecretconsultokenthatyoushouldchange
 renew_consul_certificates_vault_token_unwrap: false
 renew_consul_certificates_vault_token_renew: true

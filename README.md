@@ -19,32 +19,32 @@ renew_consul_certificates_config_dir: /etc/consul-template.d/consul # by default
 This variable defines where the files for the role are stored (consul-template configuration + templates).
 
 ```yaml
-renew_vault_certificates_consul_user: consul # by default, set to consul
+renew_consul_certificates_consul_user: consul # by default, set to consul
 ```
 This variable defines the user that'll be running the certificate renewal service. Defaults to `consul`, and should be present on the host prior to playing this role (ideally when installing consul).
 
 ```yaml
-renew_vault_certificates_consul_group: consul # by default, set to consul
+renew_consul_certificates_consul_group: consul # by default, set to consul
 ```
 This variable defines the group that'll be running the certificate renewal service. Defaults to `consul`, and should be present on the host prior to playing this role (ideally when installing consul).
 
 ```yaml
-renew_vault_certificates_vault_addr: https://127.0.0.1:8200 # by default, set to https://127.0.0.1:8200
+renew_consul_certificates_vault_addr: https://vault.example.com # by default, set to https://vault.example.com
 ```
 This variable defines the address the consul-template service will query to get the new certificates. Defaults to localhost, but can be changed if vault isnt reachable on localhost.
 
 ```yaml
-renew_vault_certificates_vault_token: mysupersecretvaulttokenthatyoushouldchange # by default, set to a dummy string
+renew_consul_certificates_vault_token: mysupersecretvaulttokenthatyoushouldchange # by default, set to a dummy string
 ```
 This variable defines the vault token top use to access vault and renew the certificate. Default is a dummy string to pass unit tests.
 
 ```yaml
-renew_vault_certificates_vault_token_unwrap: false # by default, set to false
+renew_consul_certificates_vault_token_unwrap: false # by default, set to false
 ```
 Defines whether or not the token is wrapped and should be unwrapped (this is an enterprise-only feature of vault at the moment).
 
 ```yaml
-renew_vault_certificates_vault_token_renew: true # by default, set to true
+renew_consul_certificates_vault_token_renew: true # by default, set to true
 ```
 This variable defines whether or not to renew the vault token. It should probably be `true`, and you should have a periodic token to handle this.
 
@@ -54,7 +54,7 @@ renew_consul_certificates_ca_dest: /opt/consul/tls/ca.pem # by default, set to /
 This variable defines where to copy the certificate authority upon renewal. Default to `/opt/consul/tls/ca.pem` but should be changed depending on where you store the certificate authority.
 
 ```yaml
-renew_vault_certificates_cert_dest: /opt/consul/tls/cert.pem # by default, set to /opt/consul/tls/cert.pem
+renew_consul_certificates_cert_dest: /opt/consul/tls/cert.pem # by default, set to /opt/consul/tls/cert.pem
 ```
 This variable defines where to copy the certificates upon renewal. Default to `/opt/consul/tls/cert.pem` but should be changed depending on where you store the certificates.
 
