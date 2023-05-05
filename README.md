@@ -29,6 +29,13 @@ renew_consul_certificates_consul_group: consul # by default, set to consul
 This variable defines the group that'll be running the certificate renewal service. Defaults to `consul`, and should be present on the host prior to playing this role (ideally when installing consul).
 
 ```yaml
+renew_consul_certificates_service_env_variables:
+  consul_http_addr: http://127.0.0.1:8500
+  # consul_http_token:
+```
+This variable sets the environment variables for the consul-certs services (notably the address and token to use for the `consul reload` command).
+
+```yaml
 renew_consul_certificates_vault_addr: https://vault.example.com # by default, set to https://vault.example.com
 ```
 This variable defines the address the consul-template service will query to get the new certificates. Defaults to localhost, but can be changed if vault isnt reachable on localhost.

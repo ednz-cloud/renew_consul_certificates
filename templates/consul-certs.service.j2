@@ -5,6 +5,7 @@ After=network-online.target consul.service
 ConditionFileNotEmpty={{ renew_consul_certificates_config_dir }}/consul_config.hcl
 
 [Service]
+EnvironmentFile=-{{ renew_consul_certificates_config_dir }}/consul-certs.env
 User={{ renew_consul_certificates_consul_user }}
 Group={{ renew_consul_certificates_consul_group }}
 ExecStart=/usr/bin/consul-template $OPTIONS -config={{ renew_consul_certificates_config_dir }}/consul_config.hcl

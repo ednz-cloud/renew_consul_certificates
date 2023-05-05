@@ -38,11 +38,21 @@
         mode: '0600'
 
 - name: "Configure consul-certs systemd service"
-  ansible.builtin.template:
-    src: consul-certs.service.j2
-    dest: /etc/systemd/system/consul-certs.service
-    owner: root
-    group: root
-    mode: '0644'
   notify:
     - "systemctl-daemon-reload"
+  block:
+    - name: "Configure consul-certs env file"
+      ansible.builtin.template:
+        src: consul-certs.env.j2
+        dest: "{{ renew_consul_certificates_config_dir }}/consul-certs.env"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: "Configure consul-certs systemd service"
+      ansible.builtin.template:
+        src: consul-certs.service.j2
+        dest: /etc/systemd/system/consul-certs.service
+        owner: root
+        group: root
+        mode: '0644'

@@ -2,6 +2,9 @@
 renew_consul_certificates_config_dir: /etc/consul-template.d/consul
 renew_consul_certificates_consul_user: consul
 renew_consul_certificates_consul_group: consul
+renew_consul_certificates_service_env_variables:
+  consul_http_addr: http://127.0.0.1:8500
+  # consul_http_token:
 renew_consul_certificates_vault_addr: "https://consul.example.com"
 renew_consul_certificates_vault_token: mysupersecretconsultokenthatyoushouldchange
 renew_consul_certificates_vault_token_unwrap: false
