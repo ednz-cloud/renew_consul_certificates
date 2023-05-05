@@ -11,7 +11,7 @@ template {
   perms       = 0700
   user        = "{{ renew_consul_certificates_consul_user }}"
   group       = "{{ renew_consul_certificates_consul_group }}"
-  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && consul reload '"
+  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && pkill -SIGHUP consul '"
 }
 
 template {
@@ -20,7 +20,7 @@ template {
   perms       = 0700
   user        = "{{ renew_consul_certificates_consul_user }}"
   group       = "{{ renew_consul_certificates_consul_group }}"
-  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && consul reload '"
+  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && pkill -SIGHUP consul '"
 }
 
 template {
@@ -29,5 +29,5 @@ template {
   perms       = 0700
   user        = "{{ renew_consul_certificates_consul_user }}"
   group       = "{{ renew_consul_certificates_consul_group }}"
-  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && consul reload '"
+  command     = "sh -c 'echo \"$(date) Update certificate and key file for {{ renew_consul_certificates_info['common_name'] }}\" && pkill -SIGHUP consul '"
 }
