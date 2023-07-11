@@ -1,6 +1,6 @@
 renew_consul_certificates
 =========
-> This repository is only a mirror. Development and testing is done on a private gitlab server.
+> This repository is only a mirror. Development and testing is done on a private gitea server.
 
 This role install consul-template and configure a service to automate renewal of TLS certificates for Hashicorp Consul on **debian-based** distributions.
 
