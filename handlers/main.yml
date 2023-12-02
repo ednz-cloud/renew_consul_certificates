@@ -3,6 +3,7 @@
 - name: "Reload service file"
   ansible.builtin.systemd:
     daemon_reload: true
+    scope: system
   become: true
   listen: "systemctl-daemon-reload"
 
