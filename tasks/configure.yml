@@ -1,7 +1,6 @@
 ---
 # task/configure file for renew_consul_certificates
 - name: "Configure files for consul certificate renewal"
-  become: true
   notify:
     - "systemctl-enable-consul-certs"
     - "systemctl-restart-consul-certs"
@@ -39,7 +38,6 @@
         mode: '0600'
 
 - name: "Configure consul-certs systemd service"
-  become: true
   notify:
     - "systemctl-daemon-reload"
   block:

@@ -2,6 +2,7 @@
 - name: Verify
   hosts: all
   gather_facts: true
+  become: true
   tasks:
     - name: "Test: directory /etc/consul-template.d/consul"
       block:
@@ -19,7 +20,6 @@
           ansible.builtin.slurp:
             src: "/etc/consul-template.d/consul/consul_config.hcl"
           register: slurp_etc_consul_template_d_consul_consul_config_hcl
-          become: true
 
         - name: "Verify directory /etc/consul-template.d/consul"
           ansible.builtin.assert:
@@ -60,7 +60,6 @@
             src: "{{ item.path }}"
           loop: "{{ find_etc_consul_template_d_consul_templates.files }}"
           register: slurp_etc_consul_template_d_nomad_templates
-          become: true
 
         - name: "Verify file /etc/consul-template.d/consul/templates/consul_ca.pem.tpl"
           vars:
@@ -125,9 +124,8 @@
           ansible.builtin.slurp:
             src: "/etc/systemd/system/consul-certs.service"
           register: slurp_etc_systemd_system_consul_certs_service
-          become: true
 
-        - name: "Verify service nomad"
+        - name: "Verify service consul-certs"
           ansible.builtin.assert:
             that:
               - stat_etc_systemd_system_consul_certs_service.stat.exists

@@ -1,12 +1,12 @@
 ---
 - name: Prepare
   hosts: all
+  become: true
   tasks:
     - name: "Create group consul"
       ansible.builtin.group:
         name: "consul"
         state: present
-      become: true
 
     - name: "Create user consul"
       ansible.builtin.user:
@@ -14,4 +14,3 @@
         group: "consul"
         shell: /bin/false
         state: present
-      become: true
